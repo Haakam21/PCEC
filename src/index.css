@@ -1,13 +1,54 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* src/index.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom Checkbox Styles */
+.custom-checkbox .checkbox-control {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #4a5568; /* a darker gray for better visibility */
+  border-radius: 0; /* square corners */
+  background: white;
+  position: relative;
+  vertical-align: middle; /* This helps to align the checkboxes with the text */
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.custom-checkbox .checkbox-control::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  line-height: 20px; /* Center the checkmark vertically */
+}
+
+/* This will ensure that the custom styled checkbox appears when the radio button is selected */
+.custom-checkbox input[type="radio"]:checked + .checkbox-control::before {
+  background-color: black; /* This is your chosen color */
+  color: white;
+  font-size: 16px; /* Adjust the font size as needed */
+}
+
+.custom-checkbox input[type="radio"]:checked + .checkbox-control::before {
+  content: '✓';
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Hide the default radio button */
+.custom-checkbox input[type="radio"] {
+  opacity: 0;
+  position: absolute;
+}
+
+/* Additional styles for focus and active states could be added if needed */
+.custom-checkbox input[type="radio"]:focus + .checkbox-control {
+  box-shadow: 0 0 0 2px #bfdbfe; /* a light blue outline to show focus */
+}
+
+.custom-checkbox input[type="radio"]:active + .checkbox-control::before {
+  background-color: #2b6cb0; /* a darker blue to show active state */
 }
