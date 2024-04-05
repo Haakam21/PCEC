@@ -3,52 +3,56 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Custom Checkbox Styles */
-.custom-checkbox .checkbox-control {
+/* Adjusted Custom Checkbox and Radio Styles for Compatibility */
+.custom-control .control-indicator {
   display: inline-block;
-  width: 20px;
-  height: 20px;
-  border: 1px solid #4a5568; /* a darker gray for better visibility */
-  border-radius: 0; /* square corners */
-  background: white;
+  width: 20px; /* Control size */
+  height: 20px; /* Control size */
+  border: 1px solid #4a5568; /* Restored border thickness for visibility */
+  border-radius: 0; /* Square corners */
+  background: white; /* Background color */
   position: relative;
-  vertical-align: middle; /* This helps to align the checkboxes with the text */
+  vertical-align: middle; /* Aligns control with the text */
+  /* margin-right: px; Adds spacing between checkboxes/radio buttons */
 }
 
-.custom-checkbox .checkbox-control::before {
+.custom-control .control-indicator::before {
   content: '';
   position: absolute;
   width: 100%;
   height: 100%;
   text-align: center;
-  line-height: 20px; /* Center the checkmark vertically */
+  line-height: 20px; /* Vertically centers the indicator */
 }
 
-/* This will ensure that the custom styled checkbox appears when the radio button is selected */
-.custom-checkbox input[type="radio"]:checked + .checkbox-control::before {
-  background-color: black; /* This is your chosen color */
-  color: white;
-  font-size: 16px; /* Adjust the font size as needed */
-}
-
-.custom-checkbox input[type="radio"]:checked + .checkbox-control::before {
-  content: '✓';
+/* Styles for selected state */
+.custom-control input:checked + .control-indicator::before {
+  background-color: black; /* Selected state background color */
+  color: white; /* Selected state checkmark color */
+  font-size: 16px; /* Checkmark font size */
+  content: '✓'; /* Checkmark symbol */
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-/* Hide the default radio button */
-.custom-checkbox input[type="radio"] {
-  opacity: 0;
+/* Hide the default checkbox and radio button input */
+.custom-control input {
+  opacity: 0; /* Hide the default input */
   position: absolute;
+  width: 100%; /* Full-size input boxes */
+  height: 100%; /* Full-size input boxes */
+  margin: 0; /* Reset margin to ensure full-size coverage */
+  z-index: 1; /* Ensure input is above the styled indicator for accessibility */
 }
 
-/* Additional styles for focus and active states could be added if needed */
-.custom-checkbox input[type="radio"]:focus + .checkbox-control {
-  box-shadow: 0 0 0 2px #bfdbfe; /* a light blue outline to show focus */
+/* Styles for focus and active states */
+.custom-control input:focus + .control-indicator {
+  box-shadow: 0 0 0 2px #bfdbfe; /* Focus state outline */
 }
 
-.custom-checkbox input[type="radio"]:active + .checkbox-control::before {
-  background-color: #2b6cb0; /* a darker blue to show active state */
+.custom-control input:active + .control-indicator::before {
+  background-color: #2b6cb0; /* Active state background color */
 }
+
+/* Additional styles can be added as needed */
