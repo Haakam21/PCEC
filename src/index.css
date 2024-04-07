@@ -55,4 +55,20 @@
   background-color: #2b6cb0; /* Active state background color */
 }
 
+.error-message {
+  color: #ff6b6b; /* Error message text color */
+  font-size: 0.875rem; /* Error message font size */
+  margin-top: 0.25rem; /* Space above the error message */
+  margin-bottom: 0.25rem; /* Space below the error message, if needed */
+}
+
+/* Add this new class in your CSS file */
+/* .conditional-error-message {
+  color: #ff6b6b; /* Error message text color */
+  /* font-size: 0.875rem; /* Error message font size */
+  /* margin-top: -0.25rem; Space above the error message */
+  /* margin-bottom: 0.25rem; Space below the error message, if needed */
+  /* Other specific styles if necessary */
+/* } */
+
 /* Additional styles can be added as needed */
