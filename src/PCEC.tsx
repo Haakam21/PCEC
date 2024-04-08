@@ -16,6 +16,11 @@ const ErrorMessage: React.FC<ErrorMessageProps> = ({ errors, name }) => {
   ) : null;
 };
 
+
+type FamilyHistoryDisease = 'prostateCancer' | 'breastCancer' | 'colonCancer' | 'lynchSyndrome' | 'melanoma' | 'ovarianCancer' | 'pancreaticCancer' | 'heartDisease' | 'diabetes';
+
+type FamilyMember = 'father' | 'mother' | 'brother' | 'sister' | 'aunt' | 'uncle' | 'grandfather' | 'grandmother';
+
 type FormData = {
   age: number;
   diet: string;
@@ -53,18 +58,9 @@ type FormData = {
     notImportant: boolean;
     diagnosedBPH: boolean;
   }; 
+  raceEthnicity: string;
+  familyHistory: Record<FamilyHistoryDisease, Record<FamilyMember, boolean>>;
 
-  familyHistory: {
-    prostateCancer: FamilyMembers;
-    breastCancer: FamilyMembers;
-    colonCancer: FamilyMembers;
-    lynchSyndrome: FamilyMembers;
-    melanoma: FamilyMembers;
-    ovarianCancer: FamilyMembers;
-    pancreaticCancer: FamilyMembers;
-    heartDisease: FamilyMembers;
-    diabetes: FamilyMembers;
-  };
 };
 
 const diseases = {
@@ -90,16 +86,6 @@ const relatives = {
   grandmother: 'Grandmother(s)',
 };
 
-type FamilyMembers = {
-  father: boolean;
-  mother: boolean;
-  brother: boolean;
-  sister: boolean;
-  aunt: boolean;
-  uncle: boolean;
-  grandfather: boolean;
-  grandmother: boolean;
-};
 
 const Form: React.FC = () => {
   const { register, handleSubmit, watch, reset, formState: { errors }, getValues} = useForm<FormData>();
@@ -520,30 +506,105 @@ const Form: React.FC = () => {
           </div>
         </div>
       </div>
-{/* 
-      <div className="mb-4">
-        <p className="text-sm font-medium mb-2">
-          10. Do you have a close biological relative that has been diagnosed with any of the following diseases:
-        </p>
-        {Object.entries(diseases).map(([key, disease]) => (
-          <div key={key} className="mb-2">
-            <span className="font-medium">{disease}</span>
-            <div className="flex flex-wrap justify-between">
-              {Object.entries(relatives).map(([relKey, relValue]) => (
-                <label key={`${key}-${relKey}`} className="inline-flex items-center custom-control px-2">
-                  <input
-                    type="checkbox"
-                    {...register(`familyHistory.${key}.${relKey}`)}
-                    className="hidden"
-                  />
-                  <span className="control-indicator"></span>
-                  <span className="ml-2">{relValue}</span>
-                </label>
-              ))}
+     {/* Family History */}
+
+<div className="mb-4">
+  <p className="text-sm font-medium mb-2">
+    10. Do you have a close biological relative that has been diagnosed with any of the following diseases:
+  </p>
+
+  <div className="flex mb-2">
+  <div className="w-1/4"></div> {/* Placeholder for the disease names */}
+  <div className="flex-1 text-center font-medium" style={{ marginLeft: "-3.8rem" }}>Father</div>
+  <div className="flex-1 text-center font-medium" style={{ marginLeft: "-0.5rem" }}>Mother</div>
+  <div className="flex-1 text-center font-medium" style={{ marginLeft: "3.5rem" }}>Brother(s)</div>
+  <div className="flex-1 text-center font-medium" style={{ marginLeft: "-0rem" }}>Sister(s)</div>
+  <div className="flex-1 text-center font-medium" style={{ marginLeft: "-0.5rem" }}>Aunt(s)</div>
+  <div className="flex-1 text-center font-medium" style={{ marginLeft: "-0.25rem" }}>Uncle(s)</div>
+  <div className="flex-1 text-center font-medium" style={{ marginLeft: "-0.25rem" }}>Grandfather(s)</div>
+  <div className="flex-1 text-center font-medium" style={{ marginRight: "-0.75rem" }}>Grandmother(s)</div>
+</div>
+
+{Object.entries(diseases).map(([diseaseKey, diseaseValue], index) => (
+  <div key={index} className="flex items-center mb-4">
+    <span className="w-1/4 font-medium">{diseaseValue}</span>
+    {Object.keys(relatives).map((relativeKey, relativeIndex) => {
+      const isParent = relativeKey === 'father' || relativeKey === 'mother';
+      const baseName = `familyHistory.${diseaseKey}.${relativeKey}`;
+
+      return (
+        <div key={relativeKey} className={`flex-1 ${!isParent ? 'flex justify-center space-x-2' : ''}`}>
+          {!isParent ? (
+            <div className="flex justify-center space-x-2"> {/* Apply horizontal space between checkboxes */}
+              {[...Array(2)].map((_, checkboxIndex) => {
+                const name = `${baseName}[${checkboxIndex}]`;
+                return (
+                  <label key={checkboxIndex} className="inline-flex justify-center items-center custom-control">
+                    <input
+                      type="checkbox"
+                      {...register(name as keyof FormData)}
+                      className="opacity-0 z-10"
+                      style={{ width: '16px', height: '16px' }} // Adjust this if necessary
+                      id={`${baseName}-${checkboxIndex}-${index}-${relativeIndex}`}
+                    />
+                    <span className="control-indicator"></span>
+                  </label>
+                );
+              })}
             </div>
-          </div>
-        ))}
-      </div> */}
+          ) : (
+            <label className="inline-flex justify-center items-center custom-control">
+              <input
+                type="checkbox"
+                {...register(baseName as keyof FormData)}
+                className="opacity-0 z-10"
+                style={{ width: '16px', height: '16px' }} // Adjust this if necessary
+                id={`${baseName}-0-${index}`}
+              />
+              <span className="control-indicator"></span>
+            </label>
+          )}
+        </div>
+      );
+    })}
+  </div>
+))}
+
+
+
+
+</div>
+
+
+
+          
+
+            
+        {/* Race/Ethnicity */}
+        <div className="mb-4">
+        <p className="text-sm font-medium mb-2">
+          11. What race/ethnicity best describes you?
+        </p>
+        <div className="flex gap-x-2">
+          {["White", "Hispanic", "Black", "Asian", "Native American", "Hawaiian or Pacific Islander", "Other"].map((option) => (
+            <label key={option} className="inline-flex items-center custom-control">
+              <input
+                type="radio"
+                {...register('raceEthnicity', { required: true })}
+                value={option}
+                className="hidden"
+                id={`raceEthnicity-${option}`}
+              />
+              <span className="control-indicator"></span>
+              <span className="ml-2">{option}</span>
+            </label>
+          ))}
+        </div>
+        <ErrorMessage errors={errors} name="raceEthnicity" />
+
+{/* ... rest of your form ... */}
+
+      </div>
         <button type="submit" className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
           Submit
         </button>
