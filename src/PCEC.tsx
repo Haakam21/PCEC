@@ -1,6 +1,8 @@
 import React from 'react';
 import { useEffect } from 'react';
 import { useForm, SubmitHandler, FieldErrors } from 'react-hook-form';
+import { useMutation } from '@tanstack/react-query';
+import axios from 'axios';
 
 
 type ErrorMessageProps = {
@@ -93,7 +95,18 @@ const Form: React.FC = () => {
   const watchExposedToChemicals = watch("exposedToChemicals");
   const watchProstateCancer = watch("conditions.prostateCancer");
 
-  const onSubmit: SubmitHandler<FormData> = data => console.log(data);
+  const mutation = useMutation<any, Error, FormData>({
+    mutationFn: async (data) => {
+      console.log(data)
+      return await axios.post(process.env.NODE_ENV == 'production' ? 'https://pcec.biolinkanalytics.com/patient' : 'http://127.0.0.1:5000/patient', data)
+    },
+    onSuccess: (res) => {
+      console.log(res)
+    },
+    onError: (err) => {
+      console.log(err)
+    },
+  })
 
   useEffect(() => {
     // If user changes from "Yes" to "No", reset the related fields
@@ -135,7 +148,7 @@ const Form: React.FC = () => {
   return (
     <div className="container mx-auto p-5">
       <div className="bg-black text-white text-xl font-bold py-2 px-6 mb-4">MEDICAL HISTORY</div>
-      <form onSubmit={handleSubmit(onSubmit)} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+      <form onSubmit={handleSubmit((data) => mutation.mutate(data))} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
         
         {/* Age */}
         <div className="mb-4">
