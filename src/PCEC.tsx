@@ -148,7 +148,7 @@ const Form: React.FC<{english?: boolean}> = ({english = true}) => {
     },
     onSuccess: (res) => {
       console.log(res)
-      // navigate(`/code/${code}`)
+      navigate(`/code/${res.data.code}`)
     },
     onError: (err) => {
       console.log(err)
@@ -1346,7 +1346,7 @@ const Form: React.FC<{english?: boolean}> = ({english = true}) => {
           {!mutation.isPending ? 'Submit' : 'Loading...'}
         </button>
 
-        {mutation.isPending && <h1 className='mt-6 text-xl text-medium'>Submitting form and generating code, please wait...</h1>}
+        {mutation.isPending && <h1 className='mt-6 text-xl text-medium'>Submitting form and code, please wait...</h1>}
       </form>
     </div>
   );
