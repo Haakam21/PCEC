@@ -60,7 +60,6 @@ type ParticipantInfo = {
   bloodDrawHour: number;
   bloodDrawAmPm: string;
   fastingStatus: string; // "Yes" or "No"
-  // ... any other new fields
   signature: string;
   signatureDate: string;
 };
@@ -336,6 +335,7 @@ const Form: React.FC<{english?: boolean}> = ({english = true}) => {
                       required: watchSmokeStatus === "Yes",
                     })}
                     type="number"
+                    step="0.25"
                     className="border rounded w-full py-2 px-3 mt-1"
                   />
                 </div>
