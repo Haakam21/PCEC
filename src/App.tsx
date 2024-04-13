@@ -20,7 +20,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/spanish",
-    element: <Form />,
+    element: <Form english={false} />,
   },
   {
     path: "code/:code",

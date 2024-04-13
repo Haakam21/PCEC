@@ -13,7 +13,7 @@ type ErrorMessageProps = {
 
 const ErrorMessage: React.FC<ErrorMessageProps> = ({ errors, name }) => {
   return errors[name] ? (
-    <p className="error-message text-red-500 text-xs italic">
+    <p className="error-message text-red-500 text-xs">
       {"This question is required"}
     </p>
   ) : null;
@@ -138,6 +138,8 @@ const Form: React.FC<{english?: boolean}> = ({english = true}) => {
   const watchSmokeStatus = watch("smokeStatus");
   const watchExposedToChemicals = watch("exposedToChemicals");
   const watchProstateCancer = watch("conditions.prostateCancer");
+  const watchHadAbnormalExam = watch("hadAbnormalExam");
+  const watchProstateBiopsy = watch("prostateBiopsy");
 
   const navigate = useNavigate();
   
@@ -148,10 +150,11 @@ const Form: React.FC<{english?: boolean}> = ({english = true}) => {
     },
     onSuccess: (res) => {
       console.log(res)
-      navigate(`/code/${res.data.code}`)
+      // navigate(`/code/${res.data.code}`)
     },
     onError: (err) => {
       console.log(err)
+      throw err
     },
   })
 
@@ -559,7 +562,7 @@ const Form: React.FC<{english?: boolean}> = ({english = true}) => {
         {/* PSA Tests */}
         <div className="mb-4">
           <p className="text-sm font-medium mb-2">
-            6. How many PSA tests have you had in the past 3 years?
+            6. How many PSA blood tests have you had in the past 3 years?
           </p>
           <div className="flex gap-x-2">
             {["None", "1-3", "4-6", "7+"].map((option, index) => (
@@ -584,7 +587,7 @@ const Form: React.FC<{english?: boolean}> = ({english = true}) => {
         {/* Question 7 */}
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            7. Have you previously had an ABNORMAL rectal exam or PSA test?
+            7. Have you previously had an ABNORMAL rectal exam or PSA blood test?
           </label>
           <div className="flex gap-x-2">
             <label className="inline-flex items-center custom-control">
@@ -611,155 +614,163 @@ const Form: React.FC<{english?: boolean}> = ({english = true}) => {
           <ErrorMessage errors={errors} name="hadAbnormalExam" />
         </div>
 
-        {/* Question 8 */}
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            8. Did you receive a prostate biopsy as a part of your follow-up?
-          </label>
-          <div className="flex flex-col">
-            <label className="inline-flex items-center custom-control mb-2">
-              <input
-                type="radio"
-                {...register("prostateBiopsy", {
-                  required: "This question is required",
-                })}
-                value="I did not receive a prostate biopsy"
-                className="hidden"
-              />
-              <span className="control-indicator"></span>
-              <span className="ml-2">I did not receive a prostate biopsy</span>
-            </label>
-            <label className="inline-flex items-center custom-control mb-2">
-              <input
-                type="radio"
-                {...register("prostateBiopsy", {
-                  required: "This question is required",
-                })}
-                value="The biopsy was negative/no cancer"
-                className="hidden"
-              />
-              <span className="control-indicator"></span>
-              <span className="ml-2">The biopsy was negative/no cancer</span>
-            </label>
-            <label className="inline-flex items-center custom-control">
-              <input
-                type="radio"
-                {...register("prostateBiopsy", {
-                  required: "This question is required",
-                })}
-                value="The biopsy was positive/I was diagnosed with cancer"
-                className="hidden"
-              />
-              <span className="control-indicator"></span>
-              <span className="ml-2">
-                The biopsy was positive/I was diagnosed with cancer
-              </span>
-            </label>
-          </div>
-          <ErrorMessage errors={errors} name="prostateBiopsy" />
-        </div>
-        {/* Question 9 */}
-        <div className="mt-4 mb-4">
-          <p className="text-sm font-medium mb-2">
-            9. If you did NOT receive a prostate biopsy during follow-up, why
-            not?
-          </p>
-          <div className="-mx-2">
-            {/* Row 1 */}
-            <div className="flex flex-wrap mb-2">
-              {/* Map out the checkboxes for row 1 */}
-              <label className="inline-flex items-center custom-control px-2">
-                <input
-                  type="checkbox"
-                  {...register("noBiopsyReason.didntKnow")}
-                  className="hidden"
-                />
-                <span className="control-indicator"></span>
-                <span className="ml-2">Didn’t know I was supposed to</span>
+        {watchHadAbnormalExam == "Yes" && (
+          <>
+            {/* Question 8 */}
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                8. Did you receive a prostate biopsy as a part of your follow-up?
               </label>
-
-              <label className="inline-flex items-center custom-control px-2">
-                <input
-                  type="checkbox"
-                  {...register("noBiopsyReason.notImportant")}
-                  className="hidden"
-                />
-                <span className="control-indicator"></span>
-                <span className="ml-2">Didn't think it was important</span>
-              </label>
-
-              <label className="inline-flex items-center custom-control px-2">
-                <input
-                  type="checkbox"
-                  {...register("noBiopsyReason.afraid")}
-                  className="hidden"
-                />
-                <span className="control-indicator"></span>
-                <span className="ml-2">Afraid to find out if I had cancer</span>
-              </label>
+              <div className="flex flex-col">
+                <label className="inline-flex items-center custom-control mb-2">
+                  <input
+                    type="radio"
+                    {...register("prostateBiopsy", {
+                      required: "This question is required",
+                    })}
+                    value="I did not receive a prostate biopsy"
+                    className="hidden"
+                  />
+                  <span className="control-indicator"></span>
+                  <span className="ml-2">I did not receive a prostate biopsy</span>
+                </label>
+                <label className="inline-flex items-center custom-control mb-2">
+                  <input
+                    type="radio"
+                    {...register("prostateBiopsy", {
+                      required: "This question is required",
+                    })}
+                    value="The biopsy was negative/no cancer"
+                    className="hidden"
+                  />
+                  <span className="control-indicator"></span>
+                  <span className="ml-2">The biopsy was negative/no cancer</span>
+                </label>
+                <label className="inline-flex items-center custom-control">
+                  <input
+                    type="radio"
+                    {...register("prostateBiopsy", {
+                      required: "This question is required",
+                    })}
+                    value="The biopsy was positive/I was diagnosed with cancer"
+                    className="hidden"
+                  />
+                  <span className="control-indicator"></span>
+                  <span className="ml-2">
+                    The biopsy was positive/I was diagnosed with cancer
+                  </span>
+                </label>
+              </div>
+              <ErrorMessage errors={errors} name="prostateBiopsy" />
             </div>
-            {/* Row 2 */}
-            <div className="flex flex-wrap mb-2">
-              {/* Map out the checkboxes for row 2 */}
-              <label className="inline-flex items-center custom-control px-2">
-                <input
-                  type="checkbox"
-                  {...register("noBiopsyReason.decidedNotTo")}
-                  className="hidden"
-                />
-                <span className="control-indicator"></span>
-                <span className="ml-2">Dr. decided not to</span>
-              </label>
+            {/* Question 9 */}
+            {watchProstateBiopsy == "I did not receive a prostate biopsy" && (
+              <div className="mt-4 mb-4">
+                <p className="text-sm font-medium mb-2">
+                  9. If you did NOT receive a prostate biopsy during follow-up, why
+                  not?
+                </p>
+                <div className="-mx-2">
+                  {/* Row 1 */}
+                  <div className="flex flex-wrap mb-2">
+                    {/* Map out the checkboxes for row 1 */}
+                    <label className="inline-flex items-center custom-control px-2">
+                      <input
+                        type="checkbox"
+                        {...register("noBiopsyReason.didntKnow")}
+                        className="hidden"
+                      />
+                      <span className="control-indicator"></span>
+                      <span className="ml-2">Didn’t know I was supposed to</span>
+                    </label>
 
-              <label className="inline-flex items-center custom-control px-2">
-                <input
-                  type="checkbox"
-                  {...register("noBiopsyReason.couldNotAfford")}
-                  className="hidden"
-                />
-                <span className="control-indicator"></span>
-                <span className="ml-2">Could not afford to</span>
-              </label>
+                    <label className="inline-flex items-center custom-control px-2">
+                      <input
+                        type="checkbox"
+                        {...register("noBiopsyReason.notImportant")}
+                        className="hidden"
+                      />
+                      <span className="control-indicator"></span>
+                      <span className="ml-2">Didn't think it was important</span>
+                    </label>
 
-              <label className="inline-flex items-center custom-control px-2">
-                <input
-                  type="checkbox"
-                  {...register("noBiopsyReason.cameBackForTest")}
-                  className="hidden"
-                />
-                <span className="control-indicator"></span>
-                <span className="ml-2">
-                  I came back to PCAW for repeat test
-                </span>
-              </label>
-            </div>
-            {/* Row 3 */}
-            <div className="flex flex-wrap mb-4">
-              {/* Map out the checkbox for row 3 */}
-              <label className="inline-flex items-center custom-control px-2">
-                <input
-                  type="checkbox"
-                  {...register("noBiopsyReason.diagnosedBPH")}
-                  className="hidden"
-                />
-                <span className="control-indicator"></span>
-                <span className="ml-2">
-                  I was diagnosed with BPH or Enlarged Prostate (EP) at
-                  follow-up
-                </span>
-              </label>
-              <label className="inline-flex items-center custom-control px-2">
-                <input
-                  type="checkbox"
-                  {...register("noBiopsyReason.normalPSA")}
-                  className="hidden"
-                />
-                <span className="control-indicator"></span>
-                <span className="ml-2">Repeat PSA was normal</span>
-              </label>
-            </div>
-          </div>
-        </div>
+                    <label className="inline-flex items-center custom-control px-2">
+                      <input
+                        type="checkbox"
+                        {...register("noBiopsyReason.afraid")}
+                        className="hidden"
+                      />
+                      <span className="control-indicator"></span>
+                      <span className="ml-2">Afraid to find out if I had cancer</span>
+                    </label>
+                  </div>
+                  {/* Row 2 */}
+                  <div className="flex flex-wrap mb-2">
+                    {/* Map out the checkboxes for row 2 */}
+                    <label className="inline-flex items-center custom-control px-2">
+                      <input
+                        type="checkbox"
+                        {...register("noBiopsyReason.decidedNotTo")}
+                        className="hidden"
+                      />
+                      <span className="control-indicator"></span>
+                      <span className="ml-2">Dr. decided not to</span>
+                    </label>
+
+                    <label className="inline-flex items-center custom-control px-2">
+                      <input
+                        type="checkbox"
+                        {...register("noBiopsyReason.couldNotAfford")}
+                        className="hidden"
+                      />
+                      <span className="control-indicator"></span>
+                      <span className="ml-2">Could not afford to</span>
+                    </label>
+
+                    <label className="inline-flex items-center custom-control px-2">
+                      <input
+                        type="checkbox"
+                        {...register("noBiopsyReason.cameBackForTest")}
+                        className="hidden"
+                      />
+                      <span className="control-indicator"></span>
+                      <span className="ml-2">
+                        I came back to PCAW for repeat test
+                      </span>
+                    </label>
+                  </div>
+                  {/* Row 3 */}
+                  <div className="flex flex-wrap mb-4">
+                    {/* Map out the checkbox for row 3 */}
+                    <label className="inline-flex items-center custom-control px-2">
+                      <input
+                        type="checkbox"
+                        {...register("noBiopsyReason.diagnosedBPH")}
+                        className="hidden"
+                      />
+                      <span className="control-indicator"></span>
+                      <span className="ml-2">
+                        I was diagnosed with BPH or Enlarged Prostate (EP) at
+                        follow-up
+                      </span>
+                    </label>
+                    <label className="inline-flex items-center custom-control px-2">
+                      <input
+                        type="checkbox"
+                        {...register("noBiopsyReason.normalPSA")}
+                        className="hidden"
+                      />
+                      <span className="control-indicator"></span>
+                      <span className="ml-2">Repeat PSA blood was normal</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            )}
+          </>
+        )}
+
+        
         {/* Family History */}
         <div className="mb-4">
           <p className="text-sm font-medium mb-2">
