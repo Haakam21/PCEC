@@ -835,112 +835,6 @@ const Form: React.FC<{english?: boolean}> = ({english = true}) => {
               ))}
             </tbody>
           </table>
-
-          {/* <div className="flex mb-2">
-            <div
-              className="text-center font-medium"
-              style={{ marginLeft: "14rem" }}
-            >
-              Father
-            </div>
-            <div
-              className="text-center font-medium"
-              style={{ marginLeft: "5rem" }}
-            >
-              Mother
-            </div>
-            <div
-              className="text-center font-medium"
-              style={{ marginLeft: "3rem" }}
-            >
-              Brother(s)
-            </div>
-            <div
-              className="text-center font-medium"
-              style={{ marginLeft: "3.5rem" }}
-            >
-              Sister(s)
-            </div>
-            <div
-              className="text-center font-medium"
-              style={{ marginLeft: "3rem" }}
-            >
-              Aunt(s)
-            </div>
-            <div
-              className="text-center font-medium"
-              style={{ marginLeft: "4rem" }}
-            >
-              Uncle(s)
-            </div>
-            <div
-              className="text-center font-medium"
-              style={{ marginLeft: "3.7rem" }}
-            >
-              Grandfather(s)
-            </div>
-            <div
-              className="text-center font-medium"
-              style={{ marginLeft: "2rem" }}
-            >
-              Grandmother(s)
-            </div>
-          </div>
-
-          {Object.entries(diseases).map(([diseaseKey, diseaseValue], index) => (
-            <div key={index} className="flex items-center mb-4">
-              <span className="w-1/5 font-medium">{diseaseValue}</span>
-              {Object.keys(relatives).map((relativeKey, relativeIndex) => {
-                const isParent =
-                  relativeKey === "father" || relativeKey === "mother";
-                const baseName = `familyHistory.${diseaseKey}.${relativeKey}`;
-
-                return (
-                  <div
-                    key={relativeKey}
-                    className={`flex-1 ${
-                      !isParent ? `flex justify-center space-x-2` : ""
-                    }`}
-                  >
-                    {!isParent ? (
-                      <div className="flex justify-center space-x-2 -ml-12">
-                        {" "}
-                        {[...Array(2)].map((_, checkboxIndex) => {
-                          const name = `${baseName}[${checkboxIndex}]`;
-                          return (
-                            <label
-                              key={checkboxIndex}
-                              className="inline-flex justify-center items-center custom-control"
-                            >
-                              <input
-                                type="checkbox"
-                                {...register(name as keyof FormData)}
-                                className="opacity-0 z-10"
-                                style={{ width: "16px", height: "16px" }} // Adjust this if necessary
-                                id={`${baseName}-${checkboxIndex}-${index}-${relativeIndex}`}
-                              />
-                              <span className="control-indicator"></span>
-                            </label>
-                          );
-                        })}
-                      </div>
-                    ) : (
-                      <label className="inline-flex justify-center items-center custom-control">
-                        <input
-                          type="checkbox"
-                          {...register(baseName as keyof FormData)}
-                          className="opacity-0 z-10"
-                          style={{ width: "16px", height: "16px" }} // Adjust this if necessary
-                          id={`${baseName}-0-${index}`}
-                        />
-                        <span className="control-indicator"></span>
-                      </label>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          ))} */}
         </div>
 
         {/* Race/Ethnicity */}
@@ -1346,7 +1240,7 @@ const Form: React.FC<{english?: boolean}> = ({english = true}) => {
           {!mutation.isPending ? 'Submit' : 'Loading...'}
         </button>
 
-        {mutation.isPending && <h1 className='mt-6 text-xl text-medium'>Submitting form and code, please wait...</h1>}
+        {mutation.isPending && <h1 className='mt-6 text-xl text-medium'>Submitting form and generating code, please wait...</h1>}
       </form>
     </div>
   );
