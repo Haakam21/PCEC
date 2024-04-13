@@ -335,7 +335,7 @@ const Form: React.FC<{english?: boolean}> = ({english = true}) => {
                       required: watchSmokeStatus === "Yes",
                     })}
                     type="number"
-                    step="0.25"
+                    step="0.01"
                     className="border rounded w-full py-2 px-3 mt-1"
                   />
                 </div>
@@ -353,6 +353,7 @@ const Form: React.FC<{english?: boolean}> = ({english = true}) => {
                       required: watchSmokeStatus === "Yes",
                     })}
                     type="number"
+                    step="0.01"
                     className="border rounded w-full py-2 px-3 mt-1"
                   />
                 </div>
