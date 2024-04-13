@@ -12,7 +12,7 @@ import Code from './Code';
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
+    element: <Form />,
   },
   {
     path: "/english",
@@ -23,7 +23,7 @@ const router = createBrowserRouter([
     element: <Form english={false} />,
   },
   {
-    path: "code/:code",
+    path: "/code/:code",
     element: <Code />,
   },
 ]);
