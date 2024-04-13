@@ -1,17 +1,35 @@
 // src/App.tsx
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
 
 import React from 'react';
-import Form from './PCEC'
+import Home from './Home';
+import Form from './PCEC';
+import Code from './Code';
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Home />,
+  },
+  {
+    path: "/english",
+    element: <Form />,
+  },
+  {
+    path: "/spanish",
+    element: <Form />,
+  },
+  {
+    path: "code/:code",
+    element: <Code />,
+  },
+]);
 
 const App: React.FC = () => {
-  return (
-    <div className="App">
-      <header className="App-header">
-        {/* You can put other components or content here */}
-        <Form />
-      </header>
-    </div>
-  );
+  return <RouterProvider router={router} />
 };
 
 export default App;

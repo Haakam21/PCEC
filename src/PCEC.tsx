@@ -1,6 +1,10 @@
 import React from "react";
 import { useEffect } from "react";
-import { useForm, SubmitHandler, FieldErrors } from "react-hook-form";
+import { useForm, FieldErrors } from "react-hook-form";
+import { useMutation } from '@tanstack/react-query';
+import axios from 'axios';
+import { useNavigate } from "react-router-dom";
+import Logo from './Logo';
 
 type ErrorMessageProps = {
   errors: FieldErrors;
@@ -122,7 +126,7 @@ const relatives = {
   grandmother: "Grandmother(s)",
 };
 
-const Form: React.FC = () => {
+const Form: React.FC<{english?: boolean}> = ({english = true}) => {
   const {
     register,
     handleSubmit,
@@ -134,7 +138,22 @@ const Form: React.FC = () => {
   const watchSmokeStatus = watch("smokeStatus");
   const watchExposedToChemicals = watch("exposedToChemicals");
   const watchProstateCancer = watch("conditions.prostateCancer");
-  const onSubmit: SubmitHandler<FormData> = (data) => console.log(data);
+
+  const navigate = useNavigate();
+  
+  const mutation = useMutation<any, Error, FormData>({
+    mutationFn: async (data) => {
+      console.log(data)
+      return await axios.post(process.env.NODE_ENV == 'production' ? 'https://pcec.biolinkanalytics.com/patient' : 'http://127.0.0.1:5000/patient', data)
+    },
+    onSuccess: (res) => {
+      console.log(res)
+      // navigate(`/code/${code}`)
+    },
+    onError: (err) => {
+      console.log(err)
+    },
+  })
 
   useEffect(() => {
     // If user changes from "Yes" to "No", reset the related fields
@@ -181,8 +200,10 @@ const Form: React.FC = () => {
 
   return (
     <div className="container mx-auto p-5">
+      <Logo />
+
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit((data) => mutation.mutate(data))}
         className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
       >
         <div className="bg-black text-white text-xl font-bold py-2 px-6 mb-4">
@@ -740,29 +761,97 @@ const Form: React.FC = () => {
           </div>
         </div>
         {/* Family History */}
-
         <div className="mb-4">
           <p className="text-sm font-medium mb-2">
             10. Do you have a close biological relative that has been diagnosed
             with any of the following diseases:
           </p>
 
-          <div className="flex mb-2">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col" className="font-medium pr-2">Disease</th>
+                <th scope="col" className="font-medium pr-2">Father</th>
+                <th scope="col" className="font-medium pr-2">Mother</th>
+                <th scope="col" className="font-medium pr-2">Brother(s)</th>
+                <th scope="col" className="font-medium pr-2">Sister(s)</th>
+                <th scope="col" className="font-medium pr-2">Aunt(s)</th>
+                <th scope="col" className="font-medium pr-2">Uncle(s)</th>
+                <th scope="col" className="font-medium pr-2">Grandfather(s)</th>
+                <th scope="col" className="font-medium pr-2">Grandmother(s)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Object.entries(diseases).map(([diseaseKey, diseaseValue], index) => (
+                <tr key={index}>
+                  <th scope="row" className="font-medium">{diseaseValue}</th>
+                  {Object.keys(relatives).map((relativeKey, relativeIndex) => {
+                    const isParent =
+                      relativeKey === "father" || relativeKey === "mother";
+                    const baseName = `familyHistory.${diseaseKey}.${relativeKey}`;
+
+                    return (
+                      <td
+                        key={relativeKey}
+                      >
+                        {!isParent ? (
+                          <div className="space-x-2">
+                            {/* Apply horizontal space between checkboxes */}
+                            {[...Array(2)].map((_, checkboxIndex) => {
+                              const name = `${baseName}${checkboxIndex + 1}`;
+                              return (
+                                <label
+                                  key={checkboxIndex}
+                                  className="justify-center items-center custom-control"
+                                >
+                                  <input
+                                    type="checkbox"
+                                    {...register(name as keyof FormData)}
+                                    className="opacity-0 z-10"
+                                    style={{ width: "16px", height: "16px" }} // Adjust this if necessary
+                                    id={`${baseName}-${checkboxIndex}-${index}-${relativeIndex}`}
+                                  />
+                                  <span className="control-indicator"></span>
+                                </label>
+                              );
+                            })}
+                          </div>
+                        ) : (
+                          <label className="justify-center items-center custom-control">
+                            <input
+                              type="checkbox"
+                              {...register(baseName as keyof FormData)}
+                              className="opacity-0 z-10"
+                              style={{ width: "16px", height: "16px" }} // Adjust this if necessary
+                              id={`${baseName}-0-${index}`}
+                            />
+                            <span className="control-indicator"></span>
+                          </label>
+                        )}
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          {/* <div className="flex mb-2">
             <div
               className="text-center font-medium"
-              style={{ marginLeft: "17rem", marginRight: "-5rem" }}
+              style={{ marginLeft: "14rem" }}
             >
               Father
             </div>
             <div
               className="text-center font-medium"
-              style={{ marginLeft: "10.75rem" }}
+              style={{ marginLeft: "5rem" }}
             >
               Mother
             </div>
             <div
               className="text-center font-medium"
-              style={{ marginLeft: "7.6rem", marginRight: "1rem" }}
+              style={{ marginLeft: "3rem" }}
             >
               Brother(s)
             </div>
@@ -774,13 +863,13 @@ const Form: React.FC = () => {
             </div>
             <div
               className="text-center font-medium"
-              style={{ marginLeft: "5.25rem" }}
+              style={{ marginLeft: "3rem" }}
             >
               Aunt(s)
             </div>
             <div
               className="text-center font-medium"
-              style={{ marginLeft: "5.1rem" }}
+              style={{ marginLeft: "4rem" }}
             >
               Uncle(s)
             </div>
@@ -816,7 +905,6 @@ const Form: React.FC = () => {
                     {!isParent ? (
                       <div className="flex justify-center space-x-2 -ml-12">
                         {" "}
-                        {/* Apply horizontal space between checkboxes */}
                         {[...Array(2)].map((_, checkboxIndex) => {
                           const name = `${baseName}[${checkboxIndex}]`;
                           return (
@@ -852,7 +940,7 @@ const Form: React.FC = () => {
                 );
               })}
             </div>
-          ))}
+          ))} */}
         </div>
 
         {/* Race/Ethnicity */}
@@ -1255,8 +1343,10 @@ const Form: React.FC = () => {
           type="submit"
           className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         >
-          Submit
+          {!mutation.isPending ? 'Submit' : 'Loading...'}
         </button>
+
+        {mutation.isPending && <h1 className='mt-6 text-xl text-medium'>Submitting form and generating code, please wait...</h1>}
       </form>
     </div>
   );
