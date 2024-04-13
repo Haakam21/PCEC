@@ -61,6 +61,8 @@ type ParticipantInfo = {
   bloodDrawAmPm: string;
   fastingStatus: string; // "Yes" or "No"
   // ... any other new fields
+  signature: string;
+  signatureDate: string;
 };
 type FormData = {
   age: number;
@@ -1241,6 +1243,118 @@ const Form: React.FC<{english?: boolean}> = ({english = true}) => {
               </label>
             </div>
             <ErrorMessage errors={errors} name="fastingStatus" />
+          </div>
+        </div>
+
+        <div className="bg-black text-white text-xl font-bold py-2 px-6 mb-4">
+          PARTICIPANT INFORMED CONSENT AND WAIVER FOR SCREENING
+        </div>
+
+        <p className="font-bold mt-4">
+          Welcome to Prostate Cancer Awareness Month (PCAM). In order to be screened at a PCAM site, every participant must read and
+          sign this Informed Consent form. The Prostate Health Assessment Event will consist of a blood draw for Prostate Specific Antigen
+          (PSA) blood test. Some specific locations may offer a Digital Rectal Exam (DRE) as well, if you agree to have one. Additionally,
+          some specific locations may be testing other men’s health blood tests such as; Testosterone, Cholesterol, Triglycerides, HDL, LDL and
+          Glucose levels.
+        </p>
+
+        <p className="mt-4">PROCEDURES</p>
+        <p>
+          Blood will be drawn by a healthcare professional for a PSA test (and if applicable, other men’s health tests listed above). You will be informed
+          of your blood test results at a later date, via US mail, because the labs will require analysis at a laboratory. You should receive your test results
+          within 2-6 weeks after this event. If applicable, the Digital Rectal Exam will be performed by a trained Healthcare Professional by inserting a
+          gloved finger into the rectum and gently pressing against the prostate gland. The DRE results will be included in the same letter as the lab
+          results. If your PSA and or DRE results are abnormal, we recommend that you contact your personal physician. Please share all results, normal
+          or abnormal with a Physician. Your lab results will be reviewed by a Physician and will come from the Prostate Conditions Education Council.
+        </p>
+        <p className="mt-2">
+        A portion of the blood sample drawn may be saved for the purpose of repeating either the same test or to measure other substances related
+        to your health. If you decide now that a portion of your blood can be kept for future studies, but change your mind at a later date, simply
+        contact PCEC at 303-316-4685 or toll-free at 866-477-6788 to let us know that you do not want your blood used. Future examination of your
+        blood specimen may be done at other sites.
+        </p>
+
+        <p className="mt-4">RISKS</p>
+        <p>
+        Collection of the blood specimen may cause minor discomfort, or occasionally an infection may result and a swelling containing blood (a
+hematoma) may develop.
+        </p>
+
+        <p className="mt-4">PARTICIPATION</p>
+        <p>
+        Participation is voluntary. By receiving a screening, you recognize, understand and accept all risks and responsibilities associated with and
+resulting from it. This program will only screen for abnormalities in the prostate using a PSA test and does not constitute a complete medical
+examination or diagnosis. Test results do not represent or imply that you DO or DO NOT have prostate cancer. Although a PSA cannot
+definitively diagnose prostate cancer, they may indicate levels of probability of having, or not having prostate cancer. For diagnosis of a
+medical condition such as prostate cancer, you acknowledge, understand and accept that you must see a physician for a complete medical
+examination.
+        </p>
+
+        <p className="mt-4">CONFIDENTIALITY</p>
+        <p>
+        As part of this study, you allow the release of all information from your medical records with regard to prostate disease and treatment to the
+PCEC and its agents. You allow the PCAM screening site and the PCEC and its agents to contact you regarding prostate cancer screening
+and your participation in this program. You also authorize the PCEC to use this information, including the results of your screening tests for
+statistical evaluation, scientific research and publication. You will not be individually identified in any recognizable way. The results of these
+screening tests will be released to you and, aside from the names above, the confidentiality of all of your medical records will be maintained
+within legal limits. Please note that while your anonymity will be guaranteed by signing this consent you do realize that your responses on this
+questionnaire as well as your blood sample could be used for future analysis, and in/for future studies. The PCEC and its affiliates may contact
+you based on your tests results and responses.
+        </p>
+
+        <p className="mt-4">SUBJECT AGREEMENT WAIVER</p>
+        <p>
+        I have read, understand and accept this informed consent and waiver. I have had the opportunity to ask questions, have been informed as
+to the purpose of the Screening and the potential risks and I freely consent to be a participant in the Screening. I understand and assume all
+risks associated with my participation in this program and the Screening. I understand that the program will only screen for abnormalities in
+the prostate area and does not constitute a complete medical exam or diagnosis. I understand that abnormal test results do not represent or
+imply that I DO have prostate cancer. For a diagnosis of a medical problem, I acknowledge that I must see a physician for a complete medical
+examination. I understand that I am responsible for my own health. The responsibility for any follow-up examinations to check abnormalities
+found during this screening lies solely with me and not with any participating organization, physician, or other health care volunteer. I
+understand that I will receive a copy of this informed consent and release upon request. I understand and agree to the use of information from
+my medical records in accordance with the limitations set forth in this consent form. Having read this informed consent and waiver, and in
+consideration of PCEC accepting me for participation in this prostate cancer screening program, I, for myself and for anyone entitled to act on
+my behalf, waive and release PCEC and its agents and sponsors from all claims of any kind arising out of my participation in the program and
+Screening.
+        </p>
+
+        <p className="font-bold mt-4">PLEASE NOTE:</p>
+        <p className="font-bold">
+        A screening is NOT a diagnosis; it is important to evaluate the risks and benefits of diagnosis and screening. Please be sure to contact
+a physician if you have any questions.
+        </p>
+
+
+        <div className="flex flex-wrap -mx-3 mb-4 mt-4">
+          <div className="w-full md:w-5.5/12 px-3 mb-4 md:mb-0">
+            <label
+              htmlFor="signature"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Signature of Participant:
+            </label>
+            <input
+              id="signature"
+              {...register("signature", { required: true })}
+              type="text"
+              className="border rounded w-full py-2 px-3 mt-1 shadow appearance-none text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            />
+            <ErrorMessage errors={errors} name="signature" />
+          </div>
+          <div className="w-full md:w-5.5/12 px-3 mb-4 md:mb-0">
+            <label
+              htmlFor="signatureDate"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Date:
+            </label>
+            <input
+              id="signatureDate"
+              {...register("signatureDate", { required: true })}
+              type="date"
+              className="border rounded w-full py-2 px-3 mt-1 shadow appearance-none text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            />
+            <ErrorMessage errors={errors} name="signatureDate" />
           </div>
         </div>
 
