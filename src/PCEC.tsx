@@ -132,7 +132,7 @@ const Form: React.FC<{english?: boolean}> = ({english = true}) => {
     handleSubmit,
     watch,
     reset,
-    formState: { errors },
+    formState: { errors, isValid },
     getValues,
   } = useForm<FormData>();
   const watchSmokeStatus = watch("smokeStatus");
@@ -150,7 +150,7 @@ const Form: React.FC<{english?: boolean}> = ({english = true}) => {
     },
     onSuccess: (res) => {
       console.log(res)
-      // navigate(`/code/${res.data.code}`)
+      navigate(`/code/${res.data.code}`)
     },
     onError: (err) => {
       console.log(err)
@@ -1243,6 +1243,8 @@ const Form: React.FC<{english?: boolean}> = ({english = true}) => {
             <ErrorMessage errors={errors} name="fastingStatus" />
           </div>
         </div>
+
+        {!isValid && <p className="error-message text-red-500 text-xs">Required field missing</p>}
 
         <button
           type="submit"
